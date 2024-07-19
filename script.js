@@ -24,10 +24,23 @@ if (navigator.geolocation) {
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-        .openPopup();
+      // add map eventlistener that exist in lefletlibrary
+      map.on('click', mapEvent => {
+        const click_coords = [mapEvent.latlng['lat'], mapEvent.latlng['lng']];
+        L.marker(click_coords)
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: 'running-popup',
+            })
+          )
+          .setPopupContent('Workout')
+          .openPopup();
+      });
     },
     () => {
       alert('could not get your position');
