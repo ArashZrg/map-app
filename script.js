@@ -11,6 +11,65 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+class Workout {
+  date = new Date();
+  id = ((Date.now() + '').slice(-5) * 23) / 4.5;
+  #coords;
+  #distance;
+  #duration;
+  constructor(coords, distance, duration) {
+    this.#coords = coords;
+    this.#distance = distance;
+    this.#duration = duration;
+  }
+
+  get getCoords() {
+    return this.#coords;
+  }
+
+  get getDistance() {
+    return this.#distance;
+  }
+
+  get getDuration() {
+    return this.#duration;
+  }
+}
+
+class Running extends Workout {
+  constructor(coords, distance, duration, cadence) {
+    super(coords, distance, duration);
+    this.cadence = cadence;
+    this.calcPace();
+  }
+
+  calcPace() {
+    // min/km
+    this.pace = this.getDuration / this.getDistance;
+    return this.pace;
+  }
+}
+
+class Cycling extends Workout {
+  constructor(coords, distance, duration, elevationGain) {
+    super(coords, distance, duration);
+    this.elevationGain = elevationGain;
+    this.clacSpeed();
+  }
+
+  clacSpeed() {
+    this.speed = this.getDistance / (this.getDuration / 60);
+    return this.speed;
+  }
+}
+
+// test the classess
+const run1 = new Running([39, -12], 5.2, 24, 178);
+const cycle1 = new Cycling([39, -12], 27, 95, 523);
+console.log(run1, cycle1);
+
+//////////////////////////////
+// Application
 class App {
   // private fields
   #map;
@@ -89,5 +148,4 @@ class App {
   }
 }
 
-// create an instance of App class
 const app = new App();
