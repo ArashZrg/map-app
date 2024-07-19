@@ -119,13 +119,46 @@ class App {
 
   _newWorkout(e) {
     e.preventDefault();
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-        '';
 
-    // Display Marker
+    //get data from the form
+    const type = inputType.value;
+    const distance = Number(inputDistance.value);
+    const duration = Number(inputDuration.value);
+    //check if data is valid
+
+    // if activity is running : create running object
+    if (type === 'running') {
+      const cadence = Number(inputCadence.value);
+      // Check if data is valid !
+      if (
+        typeof distance !== 'number' ||
+        distance <= 0 ||
+        typeof duration !== 'number' ||
+        duration <= 0 ||
+        typeof cadence !== 'number' ||
+        cadence <= 0
+      ) {
+        return alert('Input shoud be a positive number !');
+      }
+    }
+    // if activity is cycling : create cycling object
+    if (type === 'cycling') {
+      const elevation = Number(inputElevation.value);
+      // check if data is valid !
+      if (
+        typeof distance !== 'number' ||
+        distance <= 0 ||
+        typeof duration !== 'number' ||
+        duration <= 0 ||
+        typeof elevation !== 'number' ||
+        elevation <= 0
+      ) {
+        return alert('Input shoud be a positive number !');
+      }
+    }
+    // add new object to workout array
+
+    // render workout on map as marker
     const click_coords = [
       this.#mapEvent.latlng['lat'],
       this.#mapEvent.latlng['lng'],
@@ -133,8 +166,6 @@ class App {
     L.marker(click_coords)
       .addTo(this.#map)
       .bindPopup(
-        // pass the object of options in .popup function
-        // all of this are available in layer document
         L.popup({
           maxWidth: 250,
           minWidth: 100,
@@ -145,6 +176,14 @@ class App {
       )
       .setPopupContent('Workout')
       .openPopup();
+
+    // render workout on list
+
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
   }
 }
 
